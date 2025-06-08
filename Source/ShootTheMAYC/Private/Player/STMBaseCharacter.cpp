@@ -34,6 +34,8 @@ void ASTMBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASTMBaseCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &ASTMBaseCharacter::MoveRight);
+    PlayerInputComponent->BindAxis("LookUp", this, &ASTMBaseCharacter::LookUp);
+    PlayerInputComponent->BindAxis("TurnAround", this, &ASTMBaseCharacter::TurnAround);
 }
 
 void ASTMBaseCharacter::MoveForward(float Amount)
@@ -44,4 +46,14 @@ void ASTMBaseCharacter::MoveForward(float Amount)
 void ASTMBaseCharacter::MoveRight(float Amount) 
 {
     AddMovementInput(GetActorRightVector(), Amount);
+}
+
+void ASTMBaseCharacter::LookUp(float Amount) 
+{
+    AddControllerPitchInput(Amount);
+}
+
+void ASTMBaseCharacter::TurnAround(float Amount)
+{
+    AddControllerYawInput(Amount);
 }
