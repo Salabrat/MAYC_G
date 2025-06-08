@@ -4,15 +4,20 @@
 #include "Player/STMBaseCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
 ASTMBaseCharacter::ASTMBaseCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+    
+    SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
+    SpringArmComponent->SetupAttachment(GetRootComponent());
+    SpringArmComponent->bUsePawnControlRotation = true;
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
-    CameraComponent->SetupAttachment(GetRootComponent());
+    CameraComponent->SetupAttachment(SpringArmComponent);
 
 }
 
@@ -34,8 +39,8 @@ void ASTMBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASTMBaseCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &ASTMBaseCharacter::MoveRight);
-    PlayerInputComponent->BindAxis("LookUp", this, &ASTMBaseCharacter::LookUp);
-    PlayerInputComponent->BindAxis("TurnAround", this, &ASTMBaseCharacter::TurnAround);
+    PlayerInputComponent->BindAxis("LookUp", this, &ASTMBaseCharacter::AddControllerPitchInput);
+    PlayerInputComponent->BindAxis("TurnAround", this, &ASTMBaseCharacter::AddControllerYawInput);
 }
 
 void ASTMBaseCharacter::MoveForward(float Amount)
@@ -46,14 +51,4 @@ void ASTMBaseCharacter::MoveForward(float Amount)
 void ASTMBaseCharacter::MoveRight(float Amount) 
 {
     AddMovementInput(GetActorRightVector(), Amount);
-}
-
-void ASTMBaseCharacter::LookUp(float Amount) 
-{
-    AddControllerPitchInput(Amount);
-}
-
-void ASTMBaseCharacter::TurnAround(float Amount)
-{
-    AddControllerYawInput(Amount);
 }
