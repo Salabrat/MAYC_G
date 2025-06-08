@@ -3,6 +3,7 @@
 
 #include "Player/STMBaseCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Components/InputComponent.h"
 
 // Sets default values
 ASTMBaseCharacter::ASTMBaseCharacter()
@@ -15,24 +16,32 @@ ASTMBaseCharacter::ASTMBaseCharacter()
 
 }
 
-// Called when the game starts or when spawned
 void ASTMBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
 void ASTMBaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-// Called to bind functionality to input
 void ASTMBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAxis("MoveForward", this, &ASTMBaseCharacter::MoveForward);
+    PlayerInputComponent->BindAxis("MoveRight", this, &ASTMBaseCharacter::MoveRight);
 }
 
+void ASTMBaseCharacter::MoveForward(float Amount)
+{
+    AddMovementInput(GetActorForwardVector(), Amount);
+}
+
+void ASTMBaseCharacter::MoveRight(float Amount) 
+{
+    AddMovementInput(GetActorRightVector(), Amount);
+}
